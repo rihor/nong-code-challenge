@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useCallback, useState } from "react";
 
-import Api from "../services/api";
+import CropScoutApi from "../services/cropScoutApi";
 
 const SessionContext = createContext({});
 
@@ -18,13 +18,7 @@ const SessionContextProvider = ({ children }) => {
   });
 
   const signIn = useCallback(async ({ email, password }) => {
-    const signInResponse = await Api.post({
-      pathUrl: "auth",
-      data: {
-        email,
-        password,
-      },
-    });
+    const signInResponse = await CropScoutApi.signIn(email, password);
 
     if (!signInResponse) {
       localStorage.removeItem("@CROP_SCOUT:profile");
@@ -32,13 +26,10 @@ const SessionContextProvider = ({ children }) => {
       return;
     }
 
-    localStorage.setItem(
-      "@CROP_SCOUT:profile",
-      JSON.stringify(signInResponse.data.user)
-    );
+    localStorage.setItem("@CROP_SCOUT:profile", JSON.stringify(signInResponse));
 
     setSession({
-      profile: signInResponse.data.user,
+      profile: signInResponse,
     });
   }, []);
 
