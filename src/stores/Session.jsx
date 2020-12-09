@@ -33,7 +33,8 @@ const SessionContextProvider = ({ children }) => {
     });
   }, []);
 
-  const signOut = useCallback(() => {
+  const signOut = useCallback(async () => {
+    await CropScoutApi.signOut();
     localStorage.removeItem("@CROP_SCOUT:profile");
 
     setSession({});
