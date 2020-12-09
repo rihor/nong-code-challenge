@@ -25,9 +25,13 @@ class CropScoutApi {
     const snapshot = await firestore.collection("notes").get();
 
     const notes = snapshot.docs.map((doc) => {
+      const data = doc.data();
+      
       return {
         id: doc.id,
-        ...doc.data(),
+        person: data.person,
+        description: data.description,
+        date: data.date.toDate(),
       };
     });
 
