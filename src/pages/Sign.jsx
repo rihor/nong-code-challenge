@@ -55,7 +55,8 @@ function SignPage() {
             </svg>
           </Input>
           <Input
-            name=""
+            type="password"
+            name="password"
             value={password}
             setValue={setPassword}
             label="Password"
