@@ -36,15 +36,14 @@ class CropScoutApi {
 
   async createItem(person, description, date) {
     const firestore = firebase.firestore();
-    const newItem = await firestore.collection("notes").add({
+
+    await firestore.collection("notes").doc().set({
       person,
       description,
       date,
     });
 
-    console.log(newItem);
-
-    return newItem;
+    return;
   }
 
   async signIn(email, password) {
@@ -59,6 +58,10 @@ class CropScoutApi {
       uid: response.user.uid,
       email: response.user.email,
     };
+  }
+
+  async signOut() {
+    await this.firebaseInstance.auth().signOut();
   }
 }
 

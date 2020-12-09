@@ -28,16 +28,11 @@ const CreateNote = () => {
       return;
     }
 
-    const newItem = await api.createItem(person, description, date);
+    await api.createItem(person, description, date);
 
-    if (newItem) {
-      setPerson("");
-      setDescription("");
-      alert("A new note was created.");
-      pushToAddress("/dashboard");
-    } else {
-      alert("Could not create a note.");
-    }
+    setPerson("");
+    setDescription("");
+    pushToAddress("/dashboard");
   }
 
   return (
