@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
+import api from "../services/cropScoutApi";
 import Input from "../components/form/Input";
 import Textarea from "../components/form/Textarea";
 import Button from "../components/form/Button";
@@ -9,6 +10,7 @@ import {
   GreenBackground,
   WhiteBackground,
   MainContainer,
+  CustomDateTimePicker,
 } from "./styles/createNote";
 
 const CreateNote = () => {
@@ -16,7 +18,27 @@ const CreateNote = () => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(new Date());
 
-  const { goBack } = useHistory();
+  const { goBack, push: pushToAddress } = useHistory();
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    if (!person || !description || !date) {
+      alert("You need to fill the entire form!");
+      return;
+    }
+
+    const newItem = await api.createItem(person, description, date);
+
+    if (newItem) {
+      setPerson("");
+      setDescription("");
+      alert("A new note was created.");
+      pushToAddress("/dashboard");
+    } else {
+      alert("Could not create a note.");
+    }
+  }
 
   return (
     <Background>
@@ -43,7 +65,7 @@ const CreateNote = () => {
       <WhiteBackground></WhiteBackground>
       <MainContainer>
         <h1>Create a new note</h1>
-        <form>
+        <form onSubmit={handleSubmit}>
           <Input
             name="person"
             value={person}
@@ -56,13 +78,8 @@ const CreateNote = () => {
             setValue={setDescription}
             label="Description"
           />
-          <Input
-            name="date"
-            value={date}
-            setValue={setDate}
-            label="Date"
-            type="date"
-          />
+
+          <CustomDateTimePicker value={date} onChange={setDate} />
 
           <Button type="submit">Save note</Button>
         </form>

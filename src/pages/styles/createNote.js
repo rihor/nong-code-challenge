@@ -1,4 +1,9 @@
 import styled from "styled-components";
+import DateTimePicker from "react-datetime-picker";
+
+export const CustomDateTimePicker = styled(DateTimePicker)`
+  margin-top: 10px;
+`
 
 export const Background = styled.div`
   height: 100%;

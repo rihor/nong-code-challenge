@@ -16,27 +16,34 @@ class CropScoutApi {
       storageBucket: `${config.projectId}.appspot.com`,
       messagingSenderId: config.senderId,
       appId: config.appId,
-      measurementId: `G-MEASUREMENT_ID`,
     });
   }
 
   async getList() {
-    const firestore = firebase.firestore()
-    const list = await firestore.collection("notes").get()
-    console.log(list)
-    return list;
+    const firestore = this.firebaseInstance.firestore();
+
+    const snapshot = await firestore.collection("notes").get();
+
+    const notes = snapshot.docs.map((doc) => {
+      return {
+        id: doc.id,
+        ...doc.data(),
+      };
+    });
+
+    return notes;
   }
 
   async createItem(person, description, date) {
-    const firestore = firebase.firestore()
+    const firestore = firebase.firestore();
     const newItem = await firestore.collection("notes").add({
       person,
       description,
-      date
-    })
-    
-    console.log(newItem)
-    
+      date,
+    });
+
+    console.log(newItem);
+
     return newItem;
   }
 
